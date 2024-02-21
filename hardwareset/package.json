@@ -1,5 +1,5 @@
 {
-  "name": "hardware-checkout",
+  "name": "hardwareset",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
