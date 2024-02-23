@@ -7,8 +7,8 @@ function Header(){
       <h1> SCRUMtious Website </h1>
       <nav>
         <ul style={styles.navList}>
-          <li style={styles.navItem}><Link to ="/">Home</Link></li>
-          <li style={styles.navItem}><Link to ="/about">About</Link></li>
+          <li style={styles.navItem}><Link style={styles.listItem} to ="/">Home</Link></li>
+          <li style={styles.navItem}><Link style={styles.listItem} to ="/about">About</Link></li>
         </ul>
       </nav>
     </header>
@@ -33,8 +33,12 @@ const styles = {
   },
   navItem: {
     marginRight: '10px', // Add some space between list items
-    marginLeft: '10px'
-  }
+    marginLeft: '10px',
+    textDecoration: 'none',
+  },
+  listItem:{
+    textDecoration: 'none',
+  },
 }
 
 export default Header;
