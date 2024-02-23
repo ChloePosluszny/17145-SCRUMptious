@@ -4,13 +4,18 @@ function Register(){
     const [name, setName] = useState('')
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleRegister = (e) => {
           // Here you can implement your login logic
         e.preventDefault();
+        if(password != confirmPassword){
+          alert("Error: Passwords do not match")
+        }
         console.log('Name:', name)
         console.log('Username:', username);
         console.log('Password:', password);
+        console.log('Confirm Password:', confirmPassword);
     };
 
     return(
@@ -25,6 +30,9 @@ function Register(){
             <label htmlFor="password">Password:</label>
             <input type="password" style={styles.input}value={password} onChange={(e) => setPassword(e.target.value)} id="password" placeholder='password123' minLength={6} required />
 
+            <label htmlFor="confirmpassword">Confirm Password:</label>
+            <input type="password" style={styles.input}value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirmpassword" placeholder='password123' minLength={6} required />
+          
             <button type="submit" style={styles.button}>Register</button>
         
         </form>
