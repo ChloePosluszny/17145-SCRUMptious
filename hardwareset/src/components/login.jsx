@@ -11,24 +11,29 @@ const SimpleLogin = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <form onSubmit={handleLogin}style={styles.container}>
       <h2 style={styles.title}>Login</h2>
       <input
         style={styles.input}
         type="text"
         placeholder="Username"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        minLength={6} 
+        required
+        onChange={(e) => setUsername(e.target.value)
+        }
       />
       <input
         style={styles.input}
         type="password"
         placeholder="Password"
         value={password}
+        minLength={6}
+        required
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button style={styles.button} onClick={handleLogin}>Login</button>
-    </div>
+      <button type="submit" style={styles.button} >Login</button>
+    </form>
   );
 };
 
