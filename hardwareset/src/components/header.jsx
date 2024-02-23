@@ -9,6 +9,7 @@ function Header(){
         <ul style={styles.navList}>
           <li style={styles.navItem}><Link to ="/">Home</Link></li>
           <li style={styles.navItem}><Link to ="/about">About</Link></li>
+          <li style={styles.navItem}><Link to ="/register">Register</Link></li>
         </ul>
       </nav>
     </header>
