@@ -7,11 +7,20 @@ export default function(){
   return(
   <>
     <Header/>
-    <h2>Home Page</h2>
+    <div style={styles.div}>
+    <h2>Please log in to view the status of your hardware.</h2>
+    </div>
     <Login/>
     <Footer/>
   </>
   )
-
-
+}
+  const styles = {
+  div: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: '80px'
+  },
 }

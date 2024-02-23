@@ -9,8 +9,8 @@ function Header(){
         <ul style={styles.navList}>
 
           <li style={styles.navItem}><Link style={styles.listItem} to ="/">Home</Link></li>
-          <li style={styles.navItem}><Link style={styles.listItem} to ="/about">About</Link></li>
           <li style={styles.navItem}><Link style={styles.listItem} to ="/register">Register</Link></li>
+          <li style={styles.navItem}><Link style={styles.listItem} to ="/about">About</Link></li>
 
         </ul>
       </nav>
