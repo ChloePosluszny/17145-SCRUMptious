@@ -96,7 +96,7 @@ function Register() {
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                             </IconButton>
                         </InputAdornment>
                     ),
