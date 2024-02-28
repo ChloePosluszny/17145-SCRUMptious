@@ -11,11 +11,25 @@ function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const handleRegister = (e) => {
+    const handleRegister = async(e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
             alert("Error: Passwords do not match");
         }
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name, username, password })
+            });
+            const responseData = await response.json();
+            console.log(responseData);
+        } catch (error) {
+            console.error('Registration failed:', error);
+        }
+
         console.log('Name:', name);
         console.log('Username:', username);
         console.log('Password:', password);

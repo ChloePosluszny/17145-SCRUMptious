@@ -4,12 +4,26 @@ import {Button,TextField}  from '@mui/material';
 const SimpleLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleLogin = () => {
+  const handleLogin = async(e) => {
+    e.preventDefault();
     // Here you can implement your login logic
+    try {
+      const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({username, password })
+      });
+      const responseData = await response.json();
+      console.log(responseData);
+  } catch (error) {
+      console.error('login failed:', error);
+  }
     console.log('Username:', username);
     console.log('Password:', password);
   };
+
 
   return (
     <form onSubmit={handleLogin} style={styles.container}>
@@ -30,6 +44,7 @@ const SimpleLogin = () => {
 
        <TextField
           label='Password'
+          type='password'
           style={styles.input}
           variant='outlined'
           id="Password"
