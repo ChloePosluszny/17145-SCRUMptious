@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Button,TextField}  from '@mui/material';
 
 const SimpleLogin = () => {
   const [username, setUsername] = useState('');
@@ -11,28 +12,35 @@ const SimpleLogin = () => {
   };
 
   return (
-    <form onSubmit={handleLogin}style={styles.container}>
+    <form onSubmit={handleLogin} style={styles.container}>
       <h2 style={styles.title}>Login</h2>
-      <input
-        style={styles.input}
-        type="text"
-        placeholder="Username"
-        value={username}
-        minLength={6} 
-        required
-        onChange={(e) => setUsername(e.target.value)
-        }
-      />
-      <input
-        style={styles.input}
-        type="password"
-        placeholder="Password"
-        value={password}
-        minLength={6}
-        required
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit" style={styles.button} >Login</button>
+     
+       <TextField
+          label='Username'
+          style={styles.input}
+          variant='outlined'
+          id="username"
+          value={username}
+          fullWidth
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder='JoeBiden123'
+          minLength={6}
+          required
+         />
+
+       <TextField
+          label='Password'
+          style={styles.input}
+          variant='outlined'
+          id="Password"
+          value={password}
+          fullWidth
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder='Password123'
+          minLength={6}
+          required
+       />
+      <Button type="submit" variant='contained' style={styles.button}>Login</Button>
     </form>
   );
 };
@@ -57,8 +65,6 @@ const styles = {
   input: {
     marginBottom: '10px',
     padding: '8px',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
     width: '100%',
     boxSizing: 'border-box',
   },
