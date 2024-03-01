@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, request, jsonify
+from flask import Flask, send_from_directory, request, jsonify, redirect, url_for, render_template
 from cipher import encrypt,decrypt
 
 app = Flask(__name__, static_folder='./build', static_url_path='/')
@@ -26,7 +26,14 @@ def login():
     data = request.json
     username = data['username']
     password = data['password']
-    return jsonify({'success': True, 'Username':username ,'Password': password})
+    if username == "Rahman" and password =="password123":
+        return jsonify({'success': True, 'Username':username ,'Password': password}), 200
+    else:
+        return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
+    
+@app.route('/projects')
+def projects():
+    return 0
 
 if __name__ == '__main__':
     app.run(debug=True)

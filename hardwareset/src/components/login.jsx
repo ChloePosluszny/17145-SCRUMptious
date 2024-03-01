@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import {Button,TextField}  from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const SimpleLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   const handleLogin = async(e) => {
     e.preventDefault();
-    // Here you can implement your login logic
     try {
       const response = await fetch('/login', {
           method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({username, password })
       });
       const responseData = await response.json();
       console.log(responseData);
+
+      if (!response.ok) {
+        alert("incorrect username or password")
+        throw new Error('Login failed');
+        
+      }
+      navigate('/projects',{state: {username: responseData['Username']}});
+
   } catch (error) {
       console.error('login failed:', error);
   }
