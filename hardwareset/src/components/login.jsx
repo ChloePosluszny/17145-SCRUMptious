@@ -6,6 +6,7 @@ const SimpleLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
   const handleLogin = async(e) => {
     e.preventDefault();
     try {
@@ -19,11 +20,11 @@ const SimpleLogin = () => {
 
       if (!response.ok) {
         alert("incorrect username or password")
-        throw new Error('Login failed');
-        
+        throw new Error("incorrect username or password");
       }
-      navigate('/projects',{state: {username: responseData['Username']}});
 
+      navigate('/projects',{state: {username: responseData['Username']}});
+      
   } catch (error) {
       console.error('login failed:', error);
   }

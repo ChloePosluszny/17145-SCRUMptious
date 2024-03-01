@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
     const [name, setName] = useState('');
@@ -10,6 +11,7 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const navigate = useNavigate();
 
     const handleRegister = async(e) => {
         e.preventDefault();
@@ -24,6 +26,12 @@ function Register() {
             });
             const responseData = await response.json();
             console.log(responseData);
+            if (!response.ok) {
+                alert("Username already exist please enter a different one")
+                throw new Error("Username already exist");
+              }
+              navigate('/projects',{state: {username: responseData['Username']}});
+
         } catch (error) {
             console.error('Registration failed:', error);
         }
