@@ -19,14 +19,17 @@ def register():
     encryptedName = encrypt(name,n,d)
     encryptedUsername = encrypt(username,n,d)
     encryptedPassword = encrypt(password,n,d)
-    return jsonify({'success': True, 'Name': name, 'Username':encryptedName ,'Password':encryptedPassword })
+    if username == "Rahman": #hardcoded for testing
+        return jsonify({'success': False, 'message': 'Username already exists'}), 401       
+    else:
+        return jsonify({'success': True, 'Name': name, 'Username':username ,'Password':encryptedPassword }),200 
 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
     username = data['username']
     password = data['password']
-    if username == "Rahman" and password =="password123":
+    if username == "Rahman" and password =="password123": #hardcoded for testing
         return jsonify({'success': True, 'Username':username ,'Password': password}), 200
     else:
         return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
