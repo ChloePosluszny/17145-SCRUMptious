@@ -15,7 +15,7 @@ export default function(){
     </div>
     <Footer />
   </div>
-</>    
+</>
   )
 }
 
