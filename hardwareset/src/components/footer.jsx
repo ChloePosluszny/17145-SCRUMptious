@@ -13,12 +13,13 @@ const styles = {
   footer: {
     backgroundColor: '#333',
     color: '#fff',
-    padding: '20px',
+    padding: '10px',
     textAlign: 'center',
-    position: 'fixed',
     left: 0,
     bottom: 0,
-    width: '100%'
+    width: '100%',
+    marginTop:'auto',
+    boxSizing: 'border-box', // Include padding in width calculation
   }
 };
 

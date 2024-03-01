@@ -27,6 +27,7 @@ const styles = {
     padding: '10px',
     display: 'flex',
     alignItems: 'center',
+    overflowX: 'hidden', // Prevent horizontal scrolling
   },
   navList: {
     listStyleType: 'none', // Removes bullet points
@@ -41,6 +42,8 @@ const styles = {
   },
   listItem:{
     textDecoration: 'none',
+    fontSize: '20px',
+    color: 'white',
   },
 }
 
