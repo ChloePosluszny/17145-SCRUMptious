@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Button,TextField}  from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const SimpleLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [login, setLogin] = useState({isLoggedIn: false, username: '', password: ''});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const login = JSON.parse(localStorage.getItem('login'));
+    if (login) {
+      setLogin(login)
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('login', JSON.stringify(login));
+    if (login.isLoggedIn) {
+      navigate('/projects', {state: {username: login.username}});
+    }
+  }, [login]);
 
   const handleLogin = async(e) => {
     e.preventDefault();
@@ -13,21 +28,22 @@ const SimpleLogin = () => {
       const response = await fetch('/login', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({username, password })
+          body: JSON.stringify({username, password})
       });
       const responseData = await response.json();
       console.log(responseData);
 
       if (!response.ok) {
         alert("incorrect username or password")
+        setLogin({isLoggedIn: false, username: username, password: password});
         throw new Error("incorrect username or password");
       }
 
-      navigate('/projects',{state: {username: responseData['Username']}});
+      setLogin({isLoggedIn: true, username: username, password: password});
       
-  } catch (error) {
+    } catch (error) {
       console.error('login failed:', error);
-  }
+    }
     console.log('Username:', username);
     console.log('Password:', password);
   };
