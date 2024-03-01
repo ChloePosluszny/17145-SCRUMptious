@@ -7,10 +7,29 @@ export default function(){
     const { username } = location.state;
   return(
   <>
-    <Header/>
+  <div style={styles.container}>
+  <Header/>
     <h1> Project Page</h1>
     <h2>Welcome {username}!</h2>
-    <Footer/>
+  </div>
+    
   </>
   )
 }
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '90vh',
+    overflowX: 'hidden', // Prevent horizontal scrolling
+  },
+  content: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: '80px', // Adjust as needed
+  },
+};
