@@ -1,13 +1,16 @@
 from flask import Flask, send_from_directory, request, jsonify, redirect, url_for, render_template
 from cipher import encrypt,decrypt
 
+
 app = Flask(__name__, static_folder='./build', static_url_path='/')
-
-@app.route('/',methods=["GET"])
+@app.route('/', methods=["GET"])
 def index():
-    return send_from_directory(app.static_folder,"index.html")
+   return send_from_directory(app.static_folder, "index.html")
+@app.errorhandler(404)
+def not_found(e):
+  return send_from_directory('./build','index.html')
 
-# Define other routes and backend logic as needed
+
 @app.route('/register', methods=['POST'])
 def register():
     n = 36
