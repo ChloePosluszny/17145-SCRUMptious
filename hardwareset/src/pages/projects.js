@@ -7,13 +7,15 @@ export default function(){
     const { username } = location.state;
   return(
   <>
+  <Header />
   <div style={styles.container}>
-  <Header/>
+    <div style={styles.content}>
     <h1> Project Page</h1>
     <h2>Welcome {username}!</h2>
+    </div>
+    <Footer />
   </div>
-    
-  </>
+</>    
   )
 }
 
