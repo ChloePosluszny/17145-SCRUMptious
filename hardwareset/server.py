@@ -37,9 +37,9 @@ def login():
     else:
         return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
     
-@app.route('/projects')
-def projects():
-    return 0
+# @app.route('/projects')
+# def projects():
+#     return 0
 
 if __name__ == '__main__':
     app.run(debug=True)
