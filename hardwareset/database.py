@@ -1,36 +1,47 @@
 import pymongo as mongo
 from pymongo import MongoClient
-def get_database():
+def getCluster():
    # Provide the mongodb atlas url to connect python to mongodb using pymongo
    CONNECTION_STRING = "mongodb+srv://ChloePause:1111-1111-1111@atlascluster.pyd293q.mongodb.net/"
  
    # Create a connection using MongoClient.
-   client = MongoClient(CONNECTION_STRING)
+   cluster = MongoClient(CONNECTION_STRING)
  
    # Create database object
-   return client
+   return cluster
 
-def create_user(username, password):
+def getDatabase():
+    #get database
+    return getCluster()["HardwareCheckout"]
+
+def getCollection(collection_name):
+    #get collection: Users, Projects, HardwareData
+    return getDatabase()[collection_name]
+
+def createUser(username, password):
     #Send data to mongoDB cluster
+    users_collection = getCollection("Users")
+    users_collection.insert_one({})
+    
     return None
     
-def delete_user(username):
+def deleteUser(username):
     #delete user data
     return None
 
-def get_projects(username):
+def getProjects(username):
     #get user's projects
     return None
 
-def create_project():
+def createProject():
     #create a project
     return None
 
-def get_data(project):
+def getHardwareData(project):
     #get json data from mongoDB cluster
     return None
 
-def update_data():
+def updateData():
     #change hardware data
     return None
   
@@ -38,4 +49,4 @@ def update_data():
 if __name__ == "__main__":   
   
    # Get the database
-   dbname = get_database()
+   cluster = getCluster()
