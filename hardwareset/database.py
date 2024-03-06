@@ -40,6 +40,11 @@ def createUser(encryptedName,encryptedUsername, encryptedPassword):
 def getUser(encryptedUsername, encryptedPassword):
     #grab the user data from MongoDB
     usersCollection = getCollection("Users")
+    if usersCollection.find_one({"username" : encryptedUsername, "password" : encryptedPassword}) == None :
+        #Check that username and password combination doesn't already exist
+        print("User does not exist.")
+        return None
+    
     user = usersCollection.find_one({"username" : encryptedUsername, "password" : encryptedPassword})
     return user
 
