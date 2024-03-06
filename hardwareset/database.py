@@ -164,7 +164,7 @@ def clearHardwareData():
     setCapacityData(0)
     setAvailabilityData(0)
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # Example Usage
     #print("Example MongoDB Usage")
     #createUser("stephen", "testUser1", "testPassword1") #use encrypted user data
