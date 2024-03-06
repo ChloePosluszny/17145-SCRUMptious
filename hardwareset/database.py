@@ -24,12 +24,12 @@ def getCollection(collection_name):
     #get collection: Users, Projects, HardwareData
     return getDatabase()[collection_name]
 
-def createUser(encryptedUsername, encryptedPassword):
+def createUser(encryptedName,encryptedUsername, encryptedPassword):
     #Send encrypted user data to mongoDB cluster
     usersCollection = getCollection("Users")
-    document = {"username" : encryptedUsername, "password" : encryptedPassword, "projects" : []}
+    document = {"name" : encryptedName, "username" : encryptedUsername, "password" : encryptedPassword, "projects" : []}
     
-    if usersCollection.find_one({"username" : encryptedUsername, "password" : encryptedPassword}) != None :
+    if usersCollection.find_one({"username" : encryptedUsername}) != None :
         #Check that username and password combination doesn't already exist
         print("User already exists.")
         return False
@@ -42,6 +42,10 @@ def getUser(encryptedUsername, encryptedPassword):
     usersCollection = getCollection("Users")
     user = usersCollection.find_one({"username" : encryptedUsername, "password" : encryptedPassword})
     return user
+
+def getName(user):
+    #get the user's name
+    return user["name"]
 
 def getUsername(user):
     #take user from getUser and return their username
@@ -157,7 +161,7 @@ def clearHardwareData():
 
 if __name__ == "__main__":
     # Example Usage
-    print("Example MongoDB Usage")
-    # createUser("testUser1", "testPassword1") #use encrypted user data
-    # print(getUsername(getUser("testUser1", "testPassword1")))
+    #print("Example MongoDB Usage")
+    #createUser("stephen", "testUser1", "testPassword1") #use encrypted user data
+    #print(getName(getUser("testUser1", "testPassword1")))
     # deleteUser("testUser1", "testPassword1")
