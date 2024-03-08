@@ -6,39 +6,27 @@ import HardwareSetControls from "./HardwareSetControls";
 
 export default function ProjectsPage () {
     const [hardwareSets, setHardwareSets] = useState([
-        {name: "HW1", capacity: 100, available: 100},
-        {name: "HW2", capacity: 200, available: 200}
+        {name: "HW1", index: 0, capacity: 100, available: 100},
+        {name: "HW2", index: 1, capacity: 200, available: 200}
     ]);
 
     const users = ["User1", "User2", "User3"];
 
     const [projects, setProjects] = useState([
-        {name: "Project 1", users: [users[0], users[1]], hardwareSetsCheckedOut: [0, 0]},
-        {name: "Project 2", users: [users[1], users[2]], hardwareSetsCheckedOut: [0, 0]},
-        {name: "Project 3", users: [users[0], users[2]], hardwareSetsCheckedOut: [0, 0]}
+        {name: "Project 1", index: 0, users: [users[0], users[1]], hardwareCheckedOut: [0, 0]},
+        {name: "Project 2", index: 1, users: [users[1], users[2]], hardwareCheckedOut: [0, 0]},
+        {name: "Project 3", index: 2, users: [users[0], users[2]], hardwareCheckedOut: [0, 0]}
     ]);
 
     const updateHardwareSet = (updatedHardwareSet) => {
         const updatedHardwareSets = [...hardwareSets];
-        for (let i = 0; i < hardwareSets.length; i++) {
-            console.log(updatedHardwareSet.name + " " + hardwareSets[i].name);
-            if (updatedHardwareSet.name === hardwareSets[i].name) {
-                updatedHardwareSets[i] = updatedHardwareSet;
-            }
-        }
-        console.log(JSON.stringify(updatedHardwareSets));
+        updatedHardwareSets[updatedHardwareSet.index] = updatedHardwareSet;
         setHardwareSets(updatedHardwareSets);
     };
 
     const updateProject = (updatedProject) => {
         const updatedProjects = [...projects];
-        for (let i = 0; i < projects.length; i++) {
-            console.log(updatedProject.name + " " + projects[i].name);
-            if (updatedProject.name === projects[i].name) {
-                updatedProjects[i] = updatedProject;
-            }
-        }
-        console.log(JSON.stringify(updatedProjects));
+        updatedProjects[updatedProject.index] = updatedProject;
         setProjects(updatedProjects);
     };
     
@@ -47,25 +35,15 @@ export default function ProjectsPage () {
             <div style={styles.projectsPage}>
                 <h1>Projects</h1>
                 <div style={styles.hardwareSetDisplaysContainer}>
-                    <HardwareSetDisplay hardwareSet={hardwareSets[0]} />
-                    <HardwareSetDisplay hardwareSet={hardwareSets[1]} />
+                    {hardwareSets.map(hardwareSet => <HardwareSetDisplay hardwareSet={hardwareSet} />)}
                 </div>
                 <div style={styles.hardwareSetControlsContainer}>
                     <HardwareSetControls projects={projects} hardwareSets={hardwareSets} updateProject={updateProject} updateHardwareSet={updateHardwareSet} />
                 </div>
                 <div style={styles.projectTilesContainer}>
-                    <ProjectTile project={projects[0]} >
-                        <HardwareSetTile hardwareSet={hardwareSets[0]} checkedOut={projects[0].hardwareSetsCheckedOut[0]} />
-                        <HardwareSetTile hardwareSet={hardwareSets[1]} checkedOut={projects[0].hardwareSetsCheckedOut[1]} />
-                    </ProjectTile>
-                    <ProjectTile project={projects[1]} >
-                        <HardwareSetTile hardwareSet={hardwareSets[0]} checkedOut={projects[1].hardwareSetsCheckedOut[0]} />
-                        <HardwareSetTile hardwareSet={hardwareSets[1]} checkedOut={projects[1].hardwareSetsCheckedOut[1]} />
-                    </ProjectTile>
-                    <ProjectTile project={projects[2]} >
-                        <HardwareSetTile hardwareSet={hardwareSets[0]} checkedOut={projects[2].hardwareSetsCheckedOut[0]} />
-                        <HardwareSetTile hardwareSet={hardwareSets[1]} checkedOut={projects[2].hardwareSetsCheckedOut[1]} />
-                    </ProjectTile>
+                    {projects.map(project => <ProjectTile project={project} >
+                        {hardwareSets.map(hardwareSet => <HardwareSetTile hardwareSetName={hardwareSet.name} checkedOut={project.hardwareCheckedOut[hardwareSet.index]} />)}
+                    </ProjectTile>)}
                 </div>
             </div>
         </>

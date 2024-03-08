@@ -12,11 +12,7 @@ export default function HardwareSetControls ({projects, hardwareSets, updateProj
         const updatedHardwareSet = {...hardwareSetSelection};
         const updatedProject = {...projectSelection};
         updatedHardwareSet.available += quantity;
-        for (let i = 0; i < hardwareSets.length; i++) {
-            if (updatedHardwareSet.name === hardwareSets[i].name) {
-                updatedProject.hardwareSetsCheckedOut[i] -= quantity;
-            }
-        }
+        updatedProject.hardwareCheckedOut[updatedHardwareSet.index] -= quantity;
         if (isNaN(quantity)) {
             alert("Error: invalid input");
             return;
@@ -33,11 +29,7 @@ export default function HardwareSetControls ({projects, hardwareSets, updateProj
         const updatedHardwareSet = {...hardwareSetSelection};
         const updatedProject = {...projectSelection};
         updatedHardwareSet.available -= quantity;
-        for (let i = 0; i < hardwareSets.length; i++) {
-            if (updatedHardwareSet.name === hardwareSets[i].name) {
-                updatedProject.hardwareSetsCheckedOut[i] += quantity;
-            }
-        }
+        updatedProject.hardwareCheckedOut[updatedHardwareSet.index] += quantity;
         if (isNaN(quantity)) {
             alert("Error: invalid input");
             return;
@@ -60,7 +52,7 @@ export default function HardwareSetControls ({projects, hardwareSets, updateProj
     
     return (
         <>
-            <form onSubmit={(e) => {handleSubmit(e)}}>
+            <form onSubmit={(e) => {handleSubmit(e)}} >
                 <FormControl >
                     <InputLabel id="select-project-label">Project</InputLabel>
                     <Select
@@ -69,9 +61,7 @@ export default function HardwareSetControls ({projects, hardwareSets, updateProj
                         onChange={(e) => setProjectSelection(e.target.value)}
                         required
                     >
-                        <MenuItem value={projects[0]}>{projects[0].name}</MenuItem>
-                        <MenuItem value={projects[1]}>{projects[1].name}</MenuItem>
-                        <MenuItem value={projects[2]}>{projects[2].name}</MenuItem>
+                        {projects.map(project => <MenuItem value={project} >{project.name}</MenuItem>)}
                     </Select>
                 </FormControl>
                 <FormControl >
@@ -82,8 +72,7 @@ export default function HardwareSetControls ({projects, hardwareSets, updateProj
                         onChange={(e) => {setHardwareSetSelection(e.target.value)}}
                         required
                     >
-                        <MenuItem value={hardwareSets[0]} >{hardwareSets[0].name}</MenuItem>
-                        <MenuItem value={hardwareSets[1]} >{hardwareSets[1].name}</MenuItem>
+                        {hardwareSets.map(hardwareSet => <MenuItem value={hardwareSet} >{hardwareSet.name}</MenuItem>)}
                     </Select>
                 </FormControl>
                     

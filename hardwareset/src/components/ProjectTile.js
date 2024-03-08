@@ -3,7 +3,7 @@ export default function ProjectTile ({children, project}) {
         <>
             <div style={styles.projectTile}>
                 <p style={styles.projectName}>{project.name}</p>
-                <p style={styles.projectUsers}>{project.users.toString()}</p>
+                <p style={styles.projectUsers}>{project.users.slice(0, project.users.length - 1).map(user => <>{user}, </>)}{project.users[project.users.length - 1]}</p>
                 <div style={styles.hardwareSetTilesContainer}>
                     {children}
                 </div>

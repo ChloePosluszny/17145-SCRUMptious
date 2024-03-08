@@ -1,7 +1,7 @@
-export default function HardwareSetTile ({hardwareSet, checkedOut}) {
+export default function HardwareSetTile ({hardwareSetName, checkedOut}) {
     return (
         <>
-            <p style={styles.hardwareSetInfo}>{hardwareSet.name}: {checkedOut} checked out</p>
+            <p style={styles.hardwareSetInfo}>{hardwareSetName}: {checkedOut} checked out</p>
         </>
     )
 }
