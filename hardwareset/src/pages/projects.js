@@ -1,5 +1,6 @@
 import Header from '../components/header.jsx'
 import Footer from '../components/footer.jsx'
+import ProjectsPage from '../components/ProjectsPage.js'
 import React from 'react'
 import { useLocation } from 'react-router-dom';
 export default function(){
@@ -10,8 +11,7 @@ export default function(){
   <Header />
   <div style={styles.container}>
     <div style={styles.content}>
-    <h1> Project Page</h1>
-    <h2>Welcome {username}!</h2>
+      <ProjectsPage />
     </div>
     <Footer />
   </div>
