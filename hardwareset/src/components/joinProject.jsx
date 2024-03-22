@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button } from '@mui/material';
 
-function JoinProject(){
+function JoinProject({username}){
     const[projectID,setProjectID] = useState('');
-    const [login, setLogin] = useState({isLoggedIn: false, username: '', password: ''});
-
-    useEffect(() => {
-        const storedLogin = JSON.parse(localStorage.getItem('login'));
-        if (storedLogin) {
-            setLogin(storedLogin);
-        }
-    }, []);
 
     const handleSubmit =  async(e) => {
         e.preventDefault();
@@ -18,7 +10,7 @@ function JoinProject(){
             const response = await fetch('/joinProject', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username: login.username, projectID })
+                body: JSON.stringify({username, projectID })
             });
 
             const responseData = await response.json();

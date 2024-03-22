@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button } from '@mui/material';
 
-function CreateProject(){
+function CreateProject({username}){
     const[name,setName] = useState('');
     const[description,setDescription] = useState('');
     const[projectID,setProjectID] = useState('')
-    const [login, setLogin] = useState({isLoggedIn: false, username: '', password: ''});
-
-
-    useEffect(() => {
-        const storedLogin = JSON.parse(localStorage.getItem('login'));
-        if (storedLogin) {
-            setLogin(storedLogin);
-        }
-    }, []);
-
-   
 
     const handleSubmit =  async(e) => {
         e.preventDefault();
@@ -23,7 +12,7 @@ function CreateProject(){
             const response = await fetch('/createProject', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username: login.username, name, description, projectID })
+                body: JSON.stringify({username, name, description, projectID })
             });
 
             const responseData = await response.json();
