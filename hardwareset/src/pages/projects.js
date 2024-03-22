@@ -1,21 +1,30 @@
 import Header from '../components/header.jsx'
 import Footer from '../components/footer.jsx'
 import ProjectsPage from '../components/ProjectsPage.js'
-import React from 'react'
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 export default function(){
-    const location = useLocation();
-    const { username } = location.state;
+  const navigate = useNavigate();
+  useEffect(() => {
+    const storedLogin = JSON.parse(localStorage.getItem('login'));
+    if (storedLogin) {
+      if (!storedLogin.isLoggedIn) {
+        navigate('/');
+      }
+    }
+  }, []);
+
   return(
   <>
-  <Header />
-  <div style={styles.container}>
-    <div style={styles.content}>
-      <ProjectsPage />
+    <Header />
+    <div style={styles.container}>
+      <div style={styles.content}>
+        <ProjectsPage />
+      </div>
+      <Footer />
     </div>
-    <Footer />
-  </div>
-</>
+  </>
   )
 }
 

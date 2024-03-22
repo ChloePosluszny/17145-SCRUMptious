@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const SimpleLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [login, setLogin] = useState({isLoggedIn: false, username: '', password: ''});
+  const [login, setLogin] = useState({isLoggedIn: false, username: ''});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,12 +15,10 @@ const SimpleLogin = () => {
     }
   }, []);
 
-
-
   useEffect(() => {
     localStorage.setItem('login', JSON.stringify(login));
     if (login.isLoggedIn) {
-      navigate('/projects', {state: {username: login.username}});
+      navigate('/projects');
     }
   }, [login]);
 
@@ -37,11 +35,11 @@ const SimpleLogin = () => {
 
       if (!response.ok) {
         alert("incorrect username or password")
-        setLogin({isLoggedIn: false, username: username, password: password});
+        setLogin({isLoggedIn: false, username: username});
         throw new Error("incorrect username or password");
       }
 
-      setLogin({isLoggedIn: true, username: username, password: password});
+      setLogin({isLoggedIn: true, username: username});
       
     } catch (error) {
       console.error('login failed:', error);

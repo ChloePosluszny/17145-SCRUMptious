@@ -3,20 +3,18 @@ import Footer from '../components/footer.jsx';
 import CreateProject from '../components/createProject.jsx';
 import JoinProject from '../components/joinProject.jsx';
 import { useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function() {
-    const [login, setLogin] = useState({isLoggedIn: false, username: '', password: ''});
+    const [login, setLogin] = useState({isLoggedIn: false, username: ''});
     const navigate = useNavigate();
-
     useEffect(() => {
         const storedLogin = JSON.parse(localStorage.getItem('login'));
-        console.log(storedLogin);
-        if (storedLogin.isLoggedIn) {
+        if (storedLogin) {
             setLogin(storedLogin);
-            console.log(login);
-        } else {
-            navigate('/'); // Redirect to login page if not logged in
+            if (!storedLogin.isLoggedIn) {
+                navigate('/');
+            }
         }
     }, []);
 
@@ -26,8 +24,8 @@ export default function() {
             <div style={styles.container}>
                 <div style={styles.content}>  
                     <div style={styles.projectContainer}>
-                        <CreateProject/>
-                        <JoinProject/>
+                        <CreateProject username={login.username} />
+                        <JoinProject username={login.username} />
                     </div>
                 </div>
                 <Footer />
