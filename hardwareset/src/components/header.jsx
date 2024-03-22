@@ -13,6 +13,7 @@ function Header(){
           <li style={styles.navItem}><Link style={styles.listItem} to ="/">Home</Link></li>
           <li style={styles.navItem}><Link style={styles.listItem} to ="/register">Register</Link></li>
           <li style={styles.navItem}><Link style={styles.listItem} to ="/about">About</Link></li>
+          <li style={styles.navItem}><Link style={styles.listItem} to ="/createOrJoin">Create/Join Project</Link></li>
           <li style={styles.navItem}><Link style={styles.listItem} to='/' onClick={handleLogout}>Logout</Link></li>
         </ul>
       </nav>

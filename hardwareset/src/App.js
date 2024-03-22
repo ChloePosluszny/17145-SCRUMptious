@@ -6,6 +6,7 @@ import AboutPage from './pages/about'
 import ErrorPage from './pages/error'
 import RegisterPage from './pages/register'
 import ProjectsPage from './pages/projects'
+import CreateorJoinPage from './pages/createOrJoin'
 function App() {
   return(
  <Router>
@@ -15,6 +16,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/createOrJoin" element={<CreateorJoinPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
