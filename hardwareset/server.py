@@ -45,6 +45,25 @@ def login():
     else:
         return jsonify({'success': True, 'Username':username ,'Password': password}), 200
     
+
+@app.route('/createProject', methods=['POST'])
+def Create_Project():
+    data = request.json
+    name = data['name']
+    username = data['username']
+    description = data['description']
+    projectID = data['projectID']
+    print(data)
+    return jsonify({'success': True, 'Username':username, 'Description': description, 'projectID': projectID }), 200
+
+@app.route('/joinProject', methods=['POST'])
+def Join_Project():
+    data = request.json
+    username = data['username']
+    projectID = data['projectID']
+    print(data)
+    return jsonify({'success': True, 'Username':username, 'projectID': projectID}), 200
+
 # @app.route('/projects')
 # def projects():
 #     return 0

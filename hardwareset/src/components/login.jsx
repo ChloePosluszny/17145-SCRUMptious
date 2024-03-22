@@ -15,6 +15,8 @@ const SimpleLogin = () => {
     }
   }, []);
 
+
+
   useEffect(() => {
     localStorage.setItem('login', JSON.stringify(login));
     if (login.isLoggedIn) {
