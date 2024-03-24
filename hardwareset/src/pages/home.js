@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from '../components/header.jsx';
-import Footer from '../components/footer.jsx';
-import Login from '../components/login.jsx';
+import Header from '../components/Header.js';
+import Footer from '../components/Footer.js';
+import Login from '../components/Login.js';
 
 export default function HomePage() {
   return (

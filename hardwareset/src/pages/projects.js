@@ -1,5 +1,5 @@
-import Header from '../components/header.jsx'
-import Footer from '../components/footer.jsx'
+import Header from '../components/Header.js';
+import Footer from '../components/Footer.js';
 import ProjectsPage from '../components/ProjectsPage.js'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
