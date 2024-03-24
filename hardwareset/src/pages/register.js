@@ -1,6 +1,6 @@
-import Header from '../components/header.jsx'
-import Footer from '../components/footer.jsx'
-import Register from '../components/register.jsx'
+import Header from '../components/Header.js'
+import Footer from '../components/Footer.js'
+import Register from '../components/Register.js'
 import React from 'react'
 
 export default function(){

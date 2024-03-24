@@ -1,7 +1,7 @@
-import Header from '../components/header.jsx';
-import Footer from '../components/footer.jsx';
-import CreateProject from '../components/createProject.jsx';
-import JoinProject from '../components/joinProject.jsx';
+import Header from '../components/Header.js';
+import Footer from '../components/Footer.js';
+import CreateProject from '../components/CreateProject.js';
+import JoinProject from '../components/JoinProject.js';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
