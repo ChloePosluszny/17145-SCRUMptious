@@ -2,7 +2,6 @@ import { useState } from "react";
 import HardwareSetTile from "./HardwareSetTile";
 import ProjectTile from "./ProjectTile";
 import HardwareSetDisplay from "./HardwareSetDisplay";
-import HardwareSetControls from "./HardwareSetControls";
 
 export default function ProjectsPage () {
     const [hardwareSets, setHardwareSets] = useState([
@@ -37,12 +36,11 @@ export default function ProjectsPage () {
                 <div style={styles.hardwareSetDisplaysContainer}>
                     {hardwareSets.map(hardwareSet => <HardwareSetDisplay hardwareSet={hardwareSet} />)}
                 </div>
-                <div style={styles.hardwareSetControlsContainer}>
-                    <HardwareSetControls projects={projects} hardwareSets={hardwareSets} updateProject={updateProject} updateHardwareSet={updateHardwareSet} />
-                </div>
                 <div style={styles.projectTilesContainer}>
-                    {projects.map(project => <ProjectTile project={project} >
-                        {hardwareSets.map(hardwareSet => <HardwareSetTile hardwareSetName={hardwareSet.name} checkedOut={project.hardwareCheckedOut[hardwareSet.index]} />)}
+                    {projects.map(project => 
+                    <ProjectTile project={project} >
+                        {hardwareSets.map(hardwareSet => 
+                        <HardwareSetTile hardwareSet={hardwareSet} project={project} updateProject={updateProject} updateHardwareSet={updateHardwareSet} />)}
                     </ProjectTile>)}
                 </div>
             </div>
