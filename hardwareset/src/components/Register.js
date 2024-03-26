@@ -13,7 +13,7 @@ function Register() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
 
-    const handleRegister = async(e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
             alert("Error: Passwords do not match");
@@ -21,16 +21,16 @@ function Register() {
         try {
             const response = await fetch('/register', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({name, username, password })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, username, password })
             });
             const responseData = await response.json();
             console.log(responseData);
             if (!response.ok) {
                 alert("Username already exist please enter a different one")
                 throw new Error("Username already exist");
-              }
-              navigate('/projects',{state: {username: responseData['Username']}});
+            }
+            navigate('/projects', { state: { username: responseData['Username'] } });
 
         } catch (error) {
             console.error('Registration failed:', error);
@@ -89,7 +89,7 @@ function Register() {
                 minLength={6}
                 required
                 InputProps={{
-                    inputProps: { minLength: 6 }, 
+                    inputProps: { minLength: 6 },
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton onClick={togglePasswordVisibility} edge="end">
@@ -112,7 +112,7 @@ function Register() {
                 minLength={6}
                 required
                 InputProps={{
-                  inputProps: { minLength: 6 }, 
+                    inputProps: { minLength: 6 },
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
