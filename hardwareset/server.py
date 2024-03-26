@@ -1,6 +1,6 @@
 from flask import Flask, send_from_directory, request, jsonify, redirect, url_for, render_template
 from cipher import encrypt,decrypt
-from database import createUser,getUser
+from database import createUser,getUser,getProjects
 
 app = Flask(__name__, static_folder='./build', static_url_path='/')
 @app.route('/', methods=["GET"])
@@ -39,15 +39,15 @@ def login():
     password = data['password']
     encryptedUsername = encrypt(username,n,d)
     encryptedPassword = encrypt(password,n,d)
-    user = getUser(encryptedUsername,encryptedPassword)
-    if user == None: #hardcoded for testing
+    user = getUser(encryptedUsername)
+    if user['password'] != encryptedPassword or user == None: #hardcoded for testing
         return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
     else:
         return jsonify({'success': True, 'Username':username ,'Password': password}), 200
     
 
 @app.route('/createProject', methods=['POST'])
-def Create_Project():
+def createProject():
     data = request.json
     name = data['name']
     username = data['username']
@@ -57,7 +57,7 @@ def Create_Project():
     return jsonify({'success': True, 'Username':username, 'Description': description, 'projectID': projectID }), 200
 
 @app.route('/joinProject', methods=['POST'])
-def Join_Project():
+def joinProject():
     data = request.json
     username = data['username']
     projectID = data['projectID']
@@ -67,6 +67,14 @@ def Join_Project():
 # @app.route('/projects')
 # def projects():
 #     return 0
+
+@app.route('/fetchProjects', methods=['POST'])
+def fetchProjects():
+    username = request.json
+    encryptedUsername = encrypt(username,36,-1)
+    user = getUser(encryptedUsername)
+    projects = getProjects(user)
+    return jsonify({'success': True, 'projects': projects}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

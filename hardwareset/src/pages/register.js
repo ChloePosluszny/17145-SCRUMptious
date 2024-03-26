@@ -4,22 +4,21 @@ import Register from '../components/Register.js'
 import React from 'react'
 
 export default function(){
-
-    return(
-    <>
-      <Header />
-      <div style={styles.container}>
-        <div style={styles.content}>
-          <h2>Please log in to view the status of your hardware.</h2>
-          <Register/>
-        </div>
-        <Footer />
+  return (
+  <>
+    <Header />
+    <div style={styles.container}>
+      <div style={styles.content}>
+        <h2>Please log in to view the status of your hardware.</h2>
+        <Register/>
       </div>
-    </>
-    )
-  
-  }
-  const styles = {
+      <Footer />
+    </div>
+  </>
+  );
+}
+
+const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -28,7 +27,7 @@ export default function(){
   content: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column',
+      flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: '80px', // Adjust as needed

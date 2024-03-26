@@ -1,19 +1,39 @@
 import Header from '../components/Header.js';
 import Footer from '../components/Footer.js';
 import ProjectsPage from '../components/ProjectsPage.js'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function(){
   const navigate = useNavigate();
+  const [login, setLogin] = useState({isLoggedIn: false, username: ''});
+  
   useEffect(() => {
     const storedLogin = JSON.parse(localStorage.getItem('login'));
-    if (storedLogin) {
-      if (!storedLogin.isLoggedIn) {
-        navigate('/');
-      }
+    if (storedLogin && storedLogin.isLoggedIn) {
+      setLogin(storedLogin);
+    } else {
+      navigate('/');
     }
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (login.isLoggedIn) {
+        try {
+          const response = await fetch('/fetchProjects', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(login.username)
+          });
+          const responseData = await response.json();
+          console.log(responseData);
+        } catch (error) {
+          console.error('fetching projects failed:', error);
+        }
+      }
+    })();
+  }, [login]);
 
   return(
   <>
