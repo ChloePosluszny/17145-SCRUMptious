@@ -37,15 +37,14 @@ def createUser(encryptedName,encryptedUsername, encryptedPassword):
     usersCollection.insert_one(document)
     return True
 
-def getUser(encryptedUsername, encryptedPassword):
+def getUser(encryptedUsername):
     #grab the user data from MongoDB
     usersCollection = getCollection("Users")
-    if usersCollection.find_one({"username" : encryptedUsername, "password" : encryptedPassword}) == None :
+    user = usersCollection.find_one({"username" : encryptedUsername})
+    if user == None :
         #Check that username and password combination doesn't already exist
         print("User does not exist.")
         return None
-    
-    user = usersCollection.find_one({"username" : encryptedUsername, "password" : encryptedPassword})
     return user
 
 def getName(user):

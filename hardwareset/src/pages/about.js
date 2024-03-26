@@ -4,8 +4,7 @@ import React from 'react'
 import backgroundImage from '../assets/cat.gif';
 
 export default function(){
-  return(
- 
+  return (
     <>
       <Header />
       <div style={styles.container}>
@@ -16,9 +15,10 @@ export default function(){
         <Footer />
       </div>
     </>
-    )
+  );
 }
-  const styles = {
+
+const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',

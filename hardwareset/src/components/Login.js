@@ -9,9 +9,9 @@ const SimpleLogin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const login = JSON.parse(localStorage.getItem('login'));
-    if (login) {
-      setLogin(login)
+    const storedLogin = JSON.parse(localStorage.getItem('login'));
+    if (storedLogin) {
+      setLogin(storedLogin)
     }
   }, []);
 

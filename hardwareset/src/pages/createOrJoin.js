@@ -10,11 +10,10 @@ export default function() {
     const navigate = useNavigate();
     useEffect(() => {
         const storedLogin = JSON.parse(localStorage.getItem('login'));
-        if (storedLogin) {
+        if (storedLogin && storedLogin.isLoggedIn) {
             setLogin(storedLogin);
-            if (!storedLogin.isLoggedIn) {
-                navigate('/');
-            }
+        } else {
+            navigate('/');
         }
     }, []);
 
