@@ -3,7 +3,7 @@ import Footer from '../components/Footer.js'
 import React from 'react'
 import backgroundImage from '../assets/cat.gif';
 
-export default function(){
+export default function AboutPage () {
     return (
         <>
             <Header />

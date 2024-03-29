@@ -4,10 +4,12 @@ import ProjectsPage from '../components/ProjectsPage.js'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function(){
+export default function ProjectPage () {
+    const [projects, setProjects] = useState([]);
+    const [hardwareSets, setHardwareSets] = useState([]);
     const navigate = useNavigate();
-    const [login, setLogin] = useState({isLoggedIn: false, username: ''});
-    
+    const [login, setLogin] = useState({isLoggedIn: false, userID: ''});
+
     useEffect(() => {
         const storedLogin = JSON.parse(localStorage.getItem('login'));
         if (storedLogin && storedLogin.isLoggedIn) {
@@ -20,27 +22,43 @@ export default function(){
     useEffect(() => {
         (async () => {
             if (login.isLoggedIn) {
-                try {
-                    const response = await fetch('/fetchProjects', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(login.username)
-                    });
-                    const responseData = await response.json();
-                    console.log(responseData);
-                } catch (error) {
-                    console.error('fetching projects failed:', error);
-                }
+                fetch('/fetchProjects', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({userID: login.userID})
+                }).then(response => response.json()).then(data => {
+                    if (!data.success) {
+                        alert(data.message);
+                        return;
+                    }
+                    //setProjects(data.projects);
+                });
+                fetch('/fetchHardwareSets', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}
+                }).then(response => response.json()).then(data => {
+                    if (!data.success) {
+                        alert(data.message);
+                        return;
+                    }
+                    setHardwareSets(data.hardwareSets);
+                });
             }
         })();
     }, [login]);
+
+    const updateHardwareSet = (updatedHardwareSet) => {
+        const updatedHardwareSets = [...hardwareSets];
+        updatedHardwareSets[updatedHardwareSet.index] = updatedHardwareSet;
+        setHardwareSets(updatedHardwareSets);
+    };
 
     return(
     <>
         <Header />
         <div style={styles.container}>
             <div style={styles.content}>
-                <ProjectsPage />
+                <ProjectsPage hardwareSets={hardwareSets} updateHardwareSet={updateHardwareSet} />
             </div>
             <Footer />
         </div>

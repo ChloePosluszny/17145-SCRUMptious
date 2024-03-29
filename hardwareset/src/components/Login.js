@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const SimpleLogin = () => {
-    const [username, setUsername] = useState('');
+export default function Login () {
+    const [userID, setUserID] = useState('');
     const [password, setPassword] = useState('');
-    const [login, setLogin] = useState({ isLoggedIn: false, username: '' });
+    const [login, setLogin] = useState({ isLoggedIn: false, userID: '' });
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,27 +24,18 @@ const SimpleLogin = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
-            });
-            const responseData = await response.json();
-            console.log(responseData);
-
-            if (!response.ok) {
-                alert('incorrect username or password');
-                setLogin({ isLoggedIn: false, username: username });
-                throw new Error('incorrect username or password');
+        fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userID, password }),
+        }).then(response => response.json()).then(data => {
+            if (!data.success) {
+                alert(data.message);
+                setLogin({ isLoggedIn: false, userID: userID });
+                return;
             }
-
-            setLogin({ isLoggedIn: true, username: username });
-        } catch (error) {
-            console.error('login failed:', error);
-        }
-        console.log('Username:', username);
-        console.log('Password:', password);
+            setLogin({ isLoggedIn: true, userID: userID });
+        });
     };
 
     return (
@@ -52,13 +43,13 @@ const SimpleLogin = () => {
             <h2 style={styles.title}>Login</h2>
 
             <TextField
-                label="Username"
+                label="UserID"
                 style={styles.input}
                 variant="outlined"
-                id="username"
-                value={username}
+                id="userID"
+                value={userID}
                 fullWidth
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUserID(e.target.value)}
                 placeholder="JoeBiden123"
                 minLength={6}
                 required
@@ -82,7 +73,7 @@ const SimpleLogin = () => {
             </Button>
         </form>
     );
-};
+}
 
 const styles = {
     container: {
@@ -117,5 +108,3 @@ const styles = {
         width: '100%',
     },
 };
-
-export default SimpleLogin;

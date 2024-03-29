@@ -5,8 +5,8 @@ import JoinProject from '../components/JoinProject.js';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-export default function() {
-    const [login, setLogin] = useState({isLoggedIn: false, username: ''});
+export default function CreateOrJoinPage () {
+    const [login, setLogin] = useState({isLoggedIn: false, userID: ''});
     const navigate = useNavigate();
     useEffect(() => {
         const storedLogin = JSON.parse(localStorage.getItem('login'));
@@ -23,8 +23,8 @@ export default function() {
             <div style={styles.container}>
                 <div style={styles.content}>  
                     <div style={styles.projectContainer}>
-                        <CreateProject username={login.username} />
-                        <JoinProject username={login.username} />
+                        <CreateProject userID={login.userID} />
+                        <JoinProject userID={login.userID} />
                     </div>
                 </div>
                 <Footer />

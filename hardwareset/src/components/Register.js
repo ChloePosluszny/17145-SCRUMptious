@@ -4,9 +4,9 @@ import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-function Register() {
-    const [name, setName] = useState('');
+export default function Register() {
     const [username, setUsername] = useState('');
+    const [userID, setUserID] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -17,29 +17,19 @@ function Register() {
         e.preventDefault();
         if (password !== confirmPassword) {
             alert("Error: Passwords do not match");
+            return;
         }
-        try {
-            const response = await fetch('/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, username, password })
-            });
-            const responseData = await response.json();
-            console.log(responseData);
-            if (!response.ok) {
-                alert("Username already exist please enter a different one")
-                throw new Error("Username already exist");
+        fetch('/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, userID, password }),
+        }).then(response => response.json()).then(data => {
+            if (!data.success) {
+                alert(data.message);
+                return;
             }
-            navigate('/projects', { state: { username: responseData['Username'] } });
-
-        } catch (error) {
-            console.error('Registration failed:', error);
-        }
-
-        console.log('Name:', name);
-        console.log('Username:', username);
-        console.log('Password:', password);
-        console.log('Confirm Password:', confirmPassword);
+            navigate('/');
+        });
     };
 
     const togglePasswordVisibility = () => {
@@ -55,23 +45,23 @@ function Register() {
             <h2 style={styles.title}>Register</h2>
 
             <TextField
-                label='Full Name'
-                style={styles.input}
-                variant='outlined'
-                id="name"
-                fullWidth
-                onChange={(e) => setName(e.target.value)}
-                placeholder='Joe Biden'
-                required
-            />
-
-            <TextField
                 label='Username'
                 style={styles.input}
                 variant='outlined'
                 id="username"
                 fullWidth
                 onChange={(e) => setUsername(e.target.value)}
+                placeholder='Joe Biden'
+                required
+            />
+
+            <TextField
+                label='UserID'
+                style={styles.input}
+                variant='outlined'
+                id="userID"
+                fullWidth
+                onChange={(e) => setUserID(e.target.value)}
                 placeholder='JoeBiden123'
                 minLength={6}
                 required
@@ -161,5 +151,3 @@ const styles = {
         width: '100%',
     },
 };
-
-export default Register;

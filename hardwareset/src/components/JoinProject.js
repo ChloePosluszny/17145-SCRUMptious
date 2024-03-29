@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button } from '@mui/material';
 
-function JoinProject({username}){
+export default function JoinProject ({userID}) {
     const[projectID,setProjectID] = useState('');
 
     const handleSubmit =  async(e) => {
         e.preventDefault();
-        try {
-            const response = await fetch('/joinProject', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username, projectID })
-            });
-
-            const responseData = await response.json();
-            console.log(responseData);
-            if (!response.ok) {
-                alert("Not a valid projectid")
-                throw new Error("Not valid projectid");
-              }
-              
-
-        } catch (error) {
-            console.error('Join project failed:', error);
-        }
-
+        fetch('/joinProject', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({userID, projectID})
+        }).then(response => response.json()).then(data => {
+            if (!data.success) {
+                alert(data.message);
+                return;
+            }
+            console.log(data);
+        });
     }
 
     return(
@@ -80,5 +72,3 @@ const styles = {
         width: '100%',
     },
 };
-
-export default JoinProject;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Header() {
+export default function Header() {
     const handleLogout = () => {
         localStorage.clear();
     };
@@ -48,6 +48,4 @@ const styles = {
         fontSize: '20px',
         color: 'white',
     },
-}
-
-export default Header;
+};
