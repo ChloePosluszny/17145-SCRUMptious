@@ -2,6 +2,9 @@ from flask import Flask, send_from_directory, request, jsonify, redirect, url_fo
 from cipher import encrypt,decrypt
 from database import createUser,getUser,getProjects
 
+SHIFT_AMOUNT = 36
+SHIFT_DIRECTION = -1
+
 app = Flask(__name__, static_folder='./build', static_url_path='/')
 @app.route('/', methods=["GET"])
 def index():
@@ -13,56 +16,54 @@ def not_found(e):
 
 @app.route('/register', methods=['POST'])
 def register():
-    n = 36
-    d=-1
     data = request.json
-    name = data['name']
     username = data['username']
+    userID = data['userID']
     password = data['password']
-    encryptedName = encrypt(name,n,d)
-    encryptedUsername = encrypt(username,n,d)
-    encryptedPassword = encrypt(password,n,d)
+    encryptedUsername = encrypt(username, SHIFT_AMOUNT, SHIFT_DIRECTION)
+    encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
+    encryptedPassword = encrypt(password, SHIFT_AMOUNT, SHIFT_DIRECTION)
 
-    userExists = createUser(encryptedName,encryptedUsername, encryptedPassword)
-
-    if userExists: #hardcoded for testing
-         return jsonify({'success': True, 'Name': name, 'Username':encryptedUsername ,'Password':encryptedPassword }),200     
-    else: #user doesn't exist
-        return jsonify({'success': False, 'message': 'Username already exists'}), 401  
+    user = createUser(encryptedUsername, encryptedUserID, encryptedPassword)
+    # check if user was created
+    if user != None:
+        return jsonify({'success': True, 'Username': username, 'UserID': encryptedUserID, 'Password': encryptedPassword}),200     
+    else:
+        return jsonify({'success': False, 'message': 'UserID already exists'}), 401  
 
 @app.route('/login', methods=['POST'])
 def login():
-    n = 36
-    d=-1
     data = request.json
-    username = data['username']
+    userID = data['userID']
     password = data['password']
-    encryptedUsername = encrypt(username,n,d)
-    encryptedPassword = encrypt(password,n,d)
-    user = getUser(encryptedUsername)
-    if user['password'] != encryptedPassword or user == None: #hardcoded for testing
-        return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
+    encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
+    encryptedPassword = encrypt(password, SHIFT_AMOUNT, SHIFT_DIRECTION)
+
+    user = getUser(encryptedUserID)
+    # check if user exists and password is correct
+    if user != None and user['password'] == encryptedPassword:
+        return jsonify({'success': True, 'UserID': userID, 'Password': password}), 200
     else:
-        return jsonify({'success': True, 'Username':username ,'Password': password}), 200
+        return jsonify({'success': False, 'message': 'Invalid userID or password'}), 401
     
 
 @app.route('/createProject', methods=['POST'])
 def createProject():
     data = request.json
-    name = data['name']
-    username = data['username']
-    description = data['description']
+    projectName = data['projectName']
     projectID = data['projectID']
+    description = data['description']
+    userID = data['userID']
     print(data)
-    return jsonify({'success': True, 'Username':username, 'Description': description, 'projectID': projectID }), 200
+    return jsonify({'success': True, 'projectName': projectName, 'projectID': projectID, 'Description': description, 'userID': userID}), 200
 
 @app.route('/joinProject', methods=['POST'])
 def joinProject():
     data = request.json
-    username = data['username']
+    userID = data['userID']
     projectID = data['projectID']
     print(data)
-    return jsonify({'success': True, 'Username':username, 'projectID': projectID}), 200
+    return jsonify({'success': True, 'UserID': userID, 'projectID': projectID}), 200
 
 # @app.route('/projects')
 # def projects():
@@ -70,9 +71,10 @@ def joinProject():
 
 @app.route('/fetchProjects', methods=['POST'])
 def fetchProjects():
-    username = request.json
-    encryptedUsername = encrypt(username,36,-1)
-    user = getUser(encryptedUsername)
+    data = request.json
+    userID = data['userID']
+    encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
+    user = getUser(encryptedUserID)
     projects = getProjects(user)
     return jsonify({'success': True, 'projects': projects}), 200
 

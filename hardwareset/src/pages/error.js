@@ -2,7 +2,7 @@ import Header from '../components/Header.js'
 import Footer from '../components/Footer.js'
 import React from 'react'
 
-export default function(){
+export default function ErrorPage () {
     return (
         <>
             <Header/>

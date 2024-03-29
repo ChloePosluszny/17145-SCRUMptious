@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Footer = () => {
+export default function Footer () {
     return (
         <footer style={styles.footer}>
             <p>17145, Team SCRUMptious</p>
             <p>Copyright © {new Date().getFullYear()} Super Cool Website. All Rights Reserved.</p>
         </footer>
     );
-};
+}
 
 const styles = {
     footer: {
@@ -22,5 +22,3 @@ const styles = {
         boxSizing: 'border-box', // Include padding in width calculation
     }
 };
-
-export default Footer;

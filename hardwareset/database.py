@@ -24,37 +24,62 @@ def getCollection(collection_name):
     #get collection: Users, Projects, HardwareData
     return getDatabase()[collection_name]
 
-def createUser(encryptedName,encryptedUsername, encryptedPassword):
-    #Send encrypted user data to mongoDB cluster
+def createUser(encryptedUsername, encryptedUserID, encryptedPassword):
+    # return created user or None if user already exists
     usersCollection = getCollection("Users")
-    document = {"name" : encryptedName, "username" : encryptedUsername, "password" : encryptedPassword, "projects" : []}
-    
-    if usersCollection.find_one({"username" : encryptedUsername}) != None :
-        #Check that username and password combination doesn't already exist
-        print("User already exists.")
-        return False
-    
-    usersCollection.insert_one(document)
-    return True
 
-def getUser(encryptedUsername):
-    #grab the user data from MongoDB
+    user = usersCollection.find_one({"userID" : encryptedUserID})
+    # check if user already exists
+    if user != None:
+        return None
+    document = {"username" : encryptedUsername, "userID" : encryptedUserID, "password" : encryptedPassword, "projects" : []}
+    usersCollection.insert_one(document)
+    return document
+
+def getUser(encryptedUserID):
+    # return user or None if user does not exist
     usersCollection = getCollection("Users")
-    user = usersCollection.find_one({"username" : encryptedUsername})
+
+    user = usersCollection.find_one({"userID" : encryptedUserID})
+    # check if user exists
     if user == None :
-        #Check that username and password combination doesn't already exist
-        print("User does not exist.")
         return None
     return user
 
-def getName(user):
-    #get the user's name
-    return user["name"]
+def createProject(projectName, projectID, description, encryptedUserID):
+    #create a project
+    #TODO add users to project?
+    projectsCollection = getCollection("Projects")
+    hardwareDataCollection = getCollection("HardwareData")
+    hardwareSets = hardwareDataCollection.find()
+
+    project = projectsCollection.find_one({"projectID" : projectID})
+    if project != None :
+        #Check that username and password combination doesn't already exist
+        print("Project already exists.")
+        return False
+    document = {"projectName": projectName, "projectID": projectID, "description": description, "userIDs": [encryptedUserID], "hardwareCheckedOut": {hardwareSet["hardwareSetName"]: 0 for hardwareSet in hardwareSets}}
+    projectsCollection.insert_one(document)
+    return document
+
+def getProject(projectID):
+    # return project or None if project does not exist
+    projectsCollection = getCollection("Projects")
+
+    project = projectsCollection.find_one({"projectID": projectID})
+    # check if project exists
+    if project == None :
+        return None
+    return project
 
 def getUsername(user):
-    #take user from getUser and return their username
-    #run through dencrypter
+    #get the user's username
     return user["username"]
+
+def getUserID(user):
+    #take user from getUser and return their userID
+    #run through dencrypter
+    return user["userID"]
 
 def getPassword(user):
     #take user from getUser and return their password
@@ -64,40 +89,20 @@ def getProjects(user):
     #take user from getUser and return their list of projects
     return user["projects"]
 
-def deleteUser(encrypted_username, encrypted_password):
+def deleteUser(encryptedUserID, encryptedPassword):
     #delete user data
     #TODO remove them from project as well once that section is implemented?
     usersCollection = getCollection("Users")
-    usersCollection.delete_one({"username" : encrypted_username, "password" : encrypted_password})
+    usersCollection.delete_one({"userID" : encryptedUserID, "password" : encryptedPassword})
 
 def clearAllUsers():
     #delete ALL user entries
     usersCollection = getCollection("Users")
     usersCollection.delete_many({})
 
-def getUserProjects(encryptedUsername, encryptedPassword):
+def getUserProjects(encryptedUserID, encryptedPassword):
     #TODO get user's projects
     return None
-
-def createProject(encryptedUsername, encryptedPassword, projectName):
-    #create a project
-    #TODO add users to project?
-    projectsCollection = getCollection("Projects")
-    document = {"name" : projectName, "owner_username" : encryptedUsername, "owner_password" : encryptedPassword, "checkedOut" : 0}
-
-    if projectsCollection.find_one({"name" : projectName, "username" : encryptedUsername, "password" : encryptedPassword}) != None :
-        #Check that username and password combination doesn't already exist
-        print("Project already exists.")
-        return False
-
-    projectsCollection.insert_one(document)
-    return True
-
-def getProject(project):
-    #get the project from the database
-    projectsCollection = getCollection("Projects")
-    proj = projectsCollection.find_one({"name" : project})
-    return proj
 
 def getProjectHardwareData(project):
     #get amount of checked out hardware

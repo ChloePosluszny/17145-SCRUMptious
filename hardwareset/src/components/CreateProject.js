@@ -1,32 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button } from '@mui/material';
 
-function CreateProject({username}){
-    const[name,setName] = useState('');
-    const[description,setDescription] = useState('');
+export default function CreateProject({userID}){
+    const[projectName, setProjectName] = useState('');
+    const[description, setDescription] = useState('');
     const[projectID,setProjectID] = useState('')
 
     const handleSubmit =  async(e) => {
         e.preventDefault();
-        try {
-            const response = await fetch('/createProject', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username, name, description, projectID })
-            });
-
-            const responseData = await response.json();
-            console.log(responseData);
-            if (!response.ok) {
-                alert("ProjectID already exist please enter a differnet one")
-                throw new Error("ProjectID already exists");
-              }
-              
-
-        } catch (error) {
-            console.error('create project failed:', error);
-        }
-
+        fetch('/createProject', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({projectName, projectID, description, userID})
+        }).then(response => response.json()).then(data => {
+            if (!data.success) {
+                alert(data.message);
+                return;
+            }
+            console.log(data);
+        });
     }
 
     return(
@@ -38,7 +30,7 @@ function CreateProject({username}){
                 variant='outlined'
                 id="name"
                 fullWidth
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setProjectName(e.target.value)}
                 placeholder='Name of your project'
                 required
             />
@@ -102,5 +94,3 @@ const styles = {
         width: '100%',
     },
 };
-
-export default CreateProject;

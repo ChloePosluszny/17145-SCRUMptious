@@ -5,7 +5,7 @@ import JoinProject from '../components/JoinProject.js';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-export default function() {
+export default function CreateOrJoinPage () {
     const [login, setLogin] = useState({isLoggedIn: false, username: ''});
     const navigate = useNavigate();
     useEffect(() => {

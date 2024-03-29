@@ -3,7 +3,7 @@ import Header from '../components/Header.js';
 import Footer from '../components/Footer.js';
 import Register from '../components/Register.js';
 
-export default function RegisterPage() {
+export default function RegisterPage () {
     return (
         <>
             <Header />

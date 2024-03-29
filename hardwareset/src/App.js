@@ -5,8 +5,8 @@ import HomePage from './pages/home'
 import AboutPage from './pages/about'
 import ErrorPage from './pages/error'
 import RegisterPage from './pages/register'
-import ProjectsPage from './pages/projects'
-import CreateorJoinPage from './pages/createOrJoin'
+import ProjectPage from './pages/projects'
+import CreateOrJoinPage from './pages/createOrJoin';
 function App() {
   return(
  <Router>
@@ -15,8 +15,8 @@ function App() {
         <Route path="./pages/home" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/createOrJoin" element={<CreateorJoinPage />} />
+        <Route path="/projects" element={<ProjectPage />} />
+        <Route path="/createOrJoin" element={<CreateOrJoinPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
