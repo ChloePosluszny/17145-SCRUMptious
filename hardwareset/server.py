@@ -1,6 +1,6 @@
 from flask import Flask, send_from_directory, request, jsonify, redirect, url_for, render_template
-from cipher import encrypt,decrypt
-from database import createUser,getUser,getProjects
+from cipher import encrypt, decrypt
+import database as db
 
 SHIFT_AMOUNT = 36
 SHIFT_DIRECTION = -1
@@ -24,10 +24,10 @@ def register():
     encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
     encryptedPassword = encrypt(password, SHIFT_AMOUNT, SHIFT_DIRECTION)
 
-    user = createUser(encryptedUsername, encryptedUserID, encryptedPassword)
+    userCreated = db.createUser(encryptedUsername, encryptedUserID, encryptedPassword)
     # check if user was created
-    if user != None:
-        return jsonify({'success': True, 'Username': username, 'UserID': encryptedUserID, 'Password': encryptedPassword}),200     
+    if userCreated != False:
+        return jsonify({'success': True, 'userID': userID}), 200     
     else:
         return jsonify({'success': False, 'message': 'UserID already exists'}), 401  
 
@@ -39,10 +39,10 @@ def login():
     encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
     encryptedPassword = encrypt(password, SHIFT_AMOUNT, SHIFT_DIRECTION)
 
-    user = getUser(encryptedUserID)
+    user = db.getUser(encryptedUserID)
     # check if user exists and password is correct
     if user != None and user['password'] == encryptedPassword:
-        return jsonify({'success': True, 'UserID': userID, 'Password': password}), 200
+        return jsonify({'success': True, 'userID': userID}), 200
     else:
         return jsonify({'success': False, 'message': 'Invalid userID or password'}), 401
     
@@ -54,16 +54,30 @@ def createProject():
     projectID = data['projectID']
     description = data['description']
     userID = data['userID']
-    print(data)
-    return jsonify({'success': True, 'projectName': projectName, 'projectID': projectID, 'Description': description, 'userID': userID}), 200
+    encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
+
+    projectCreated = db.createProject(projectName, projectID, description, encryptedUserID)
+    # check if project was created
+    if projectCreated != False:
+        return jsonify({'success': True, 'projectID': projectID}), 200
+    else:
+        return jsonify({'success': False, 'message': 'ProjectID already exists'}), 401
 
 @app.route('/joinProject', methods=['POST'])
 def joinProject():
     data = request.json
     userID = data['userID']
     projectID = data['projectID']
-    print(data)
-    return jsonify({'success': True, 'UserID': userID, 'projectID': projectID}), 200
+    encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
+
+    project = db.getProject(projectID)
+    # check if project exists
+    if project != None:
+        project['userIDs'].append(encryptedUserID)
+        db.joinProject(projectID, encryptedUserID)
+        return jsonify({'success': True, 'projectID': projectID}), 200
+    else:
+        return jsonify({'success': False, 'message': 'ProjectID does not exist'}), 401
 
 # @app.route('/projects')
 # def projects():
@@ -74,10 +88,14 @@ def fetchProjects():
     data = request.json
     userID = data['userID']
     encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
-    user = getUser(encryptedUserID)
-    projects = getProjects(user)
+    user = db.getUser(encryptedUserID)
+    projects = db.getProjects(user)
     return jsonify({'success': True, 'projects': projects}), 200
+
+@app.route('/fetchHardwareSets', methods=['POST'])
+def fetchHardwareData():
+    hardwareSets = db.getHardwareSets()
+    return jsonify({'success': True, 'hardwareSets': hardwareSets}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
-

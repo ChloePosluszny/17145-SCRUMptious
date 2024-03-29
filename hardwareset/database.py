@@ -25,16 +25,16 @@ def getCollection(collection_name):
     return getDatabase()[collection_name]
 
 def createUser(encryptedUsername, encryptedUserID, encryptedPassword):
-    # return created user or None if user already exists
+    # return created user or False if user already exists
     usersCollection = getCollection("Users")
 
     user = usersCollection.find_one({"userID" : encryptedUserID})
     # check if user already exists
     if user != None:
-        return None
+        return False
     document = {"username" : encryptedUsername, "userID" : encryptedUserID, "password" : encryptedPassword, "projects" : []}
     usersCollection.insert_one(document)
-    return document
+    return True
 
 def getUser(encryptedUserID):
     # return user or None if user does not exist
@@ -47,20 +47,18 @@ def getUser(encryptedUserID):
     return user
 
 def createProject(projectName, projectID, description, encryptedUserID):
-    #create a project
-    #TODO add users to project?
+    # return created project or False if project already exists
     projectsCollection = getCollection("Projects")
     hardwareDataCollection = getCollection("HardwareData")
     hardwareSets = hardwareDataCollection.find()
 
     project = projectsCollection.find_one({"projectID" : projectID})
+    # check if project already exists
     if project != None :
-        #Check that username and password combination doesn't already exist
-        print("Project already exists.")
         return False
     document = {"projectName": projectName, "projectID": projectID, "description": description, "userIDs": [encryptedUserID], "hardwareCheckedOut": {hardwareSet["hardwareSetName"]: 0 for hardwareSet in hardwareSets}}
     projectsCollection.insert_one(document)
-    return document
+    return True
 
 def getProject(projectID):
     # return project or None if project does not exist
@@ -68,9 +66,23 @@ def getProject(projectID):
 
     project = projectsCollection.find_one({"projectID": projectID})
     # check if project exists
-    if project == None :
+    if project == None:
         return None
     return project
+
+def joinProject(projectID, encryptedUserID):
+    # add user to project
+    projectsCollection = getCollection("Projects")
+
+    project = projectsCollection.find_one({"projectID": projectID})
+    project["userIDs"].append(encryptedUserID)
+    projectsCollection.update_one({"projectID": projectID}, {"$set": {"userIDs": project["userIDs"]}})
+
+def getHardwareSets():
+    # return all hardware sets
+    hardwareDataCollection = getCollection("HardwareData")
+    hardwareSets = hardwareDataCollection.find()
+    return hardwareSets
 
 def getUsername(user):
     #get the user's username
