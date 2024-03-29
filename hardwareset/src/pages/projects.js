@@ -5,10 +5,11 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function ProjectPage () {
+    const [projects, setProjects] = useState([]);
+    const [hardwareSets, setHardwareSets] = useState([]);
     const navigate = useNavigate();
     const [login, setLogin] = useState({isLoggedIn: false, userID: ''});
-    const [projects, setProjects] = useState([]);
-    
+
     useEffect(() => {
         const storedLogin = JSON.parse(localStorage.getItem('login'));
         if (storedLogin && storedLogin.isLoggedIn) {
@@ -30,18 +31,34 @@ export default function ProjectPage () {
                         alert(data.message);
                         return;
                     }
-                    setProjects(data.projects);
+                    //setProjects(data.projects);
+                });
+                fetch('/fetchHardwareSets', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}
+                }).then(response => response.json()).then(data => {
+                    if (!data.success) {
+                        alert(data.message);
+                        return;
+                    }
+                    setHardwareSets(data.hardwareSets);
                 });
             }
         })();
     }, [login]);
+
+    const updateHardwareSet = (updatedHardwareSet) => {
+        const updatedHardwareSets = [...hardwareSets];
+        updatedHardwareSets[updatedHardwareSet.index] = updatedHardwareSet;
+        setHardwareSets(updatedHardwareSets);
+    };
 
     return(
     <>
         <Header />
         <div style={styles.container}>
             <div style={styles.content}>
-                <ProjectsPage />
+                <ProjectsPage hardwareSets={hardwareSets} updateHardwareSet={updateHardwareSet} />
             </div>
             <Footer />
         </div>

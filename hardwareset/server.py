@@ -90,12 +90,17 @@ def fetchProjects():
     encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
     user = db.getUser(encryptedUserID)
     projects = db.getProjects(user)
-    return jsonify({'success': True, 'projects': projects}), 200
+    return {'success': True, 'projects': projects}, 200
 
 @app.route('/fetchHardwareSets', methods=['POST'])
-def fetchHardwareData():
-    hardwareSets = db.getHardwareSets()
-    return jsonify({'success': True, 'hardwareSets': hardwareSets}), 200
+def fetchHardwareSets():
+    hardwareSetsDocuments = db.getHardwareSets()
+    hardwareSets = []
+    idx = 0
+    for hardwareSet in hardwareSetsDocuments:
+        hardwareSets.append({'name': hardwareSet['hardwareSetName'], 'index': idx, 'capacity': hardwareSet['hardwareSetCapacity'], 'available': hardwareSet['hardwareSetAvailability']})
+        idx += 1
+    return {'success': True, 'hardwareSets': hardwareSets}, 200
 
 if __name__ == '__main__':
     app.run(debug=True)
