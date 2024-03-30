@@ -26,7 +26,7 @@ def register():
 
     userCreated = db.createUser(encryptedUsername, encryptedUserID, encryptedPassword)
     # check if user was created
-    if userCreated != False:
+    if userCreated:
         return jsonify({'success': True, 'userID': userID}), 200     
     else:
         return jsonify({'success': False, 'message': 'UserID already exists'}), 401  
@@ -58,7 +58,7 @@ def createProject():
 
     projectCreated = db.createProject(projectName, projectID, description, encryptedUserID)
     # check if project was created
-    if projectCreated != False:
+    if projectCreated:
         return jsonify({'success': True, 'projectID': projectID}), 200
     else:
         return jsonify({'success': False, 'message': 'ProjectID already exists'}), 401
@@ -71,13 +71,15 @@ def joinProject():
     encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
 
     project = db.getProject(projectID)
-    # check if project exists
-    if project != None:
-        project['userIDs'].append(encryptedUserID)
+    user = db.getUser(encryptedUserID)
+    # check if project exists and project is not already joined
+    if project == None:
+        return jsonify({'success': False, 'message': 'ProjectID does not exist'}), 401
+    elif user['projects'].count(projectID) != 0:
+        return jsonify({'success': False, 'message': 'Project has already been joined'}), 401
+    else:
         db.joinProject(projectID, encryptedUserID)
         return jsonify({'success': True, 'projectID': projectID}), 200
-    else:
-        return jsonify({'success': False, 'message': 'ProjectID does not exist'}), 401
 
 # @app.route('/projects')
 # def projects():
