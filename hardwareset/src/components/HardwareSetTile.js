@@ -4,42 +4,58 @@ import { useState } from "react";
 export default function HardwareSetTile ({hardwareSet, project, updateProject, updateHardwareSet}) {
     const [textFieldQuantity, setTextFieldQuantity] = useState("");
     
-    const handleCheckIn = () => {
+    const handleCheckIn = async () => {
         const quantity = parseInt(textFieldQuantity);
         
-        if (isNaN(quantity)) {
+        if (isNaN(quantity) || quantity === 0) {
             alert("Error: invalid input");
-            return;
-        } else if (project.hardwareCheckedOut[hardwareSet.index] - quantity < 0 || hardwareSet.available + quantity > hardwareSet.capacity) {
-            alert("Error: trying to check in too many items");
             return;
         }
 
-        const updatedHardwareSet = {...hardwareSet};
-        const updatedProject = {...project};
-        updatedHardwareSet.available += quantity;
-        updatedProject.hardwareCheckedOut[updatedHardwareSet.index] -= quantity;
-        updateHardwareSet(updatedHardwareSet);
-        updateProject(updatedProject);
+        fetch('/updateHardwareSet', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({hardwareSetName: hardwareSet.name, projectID: project.projectID, projectCheckedOut: project.hardwareCheckedOut[hardwareSet.index], quantity: quantity})
+        }).then(response => response.json()).then(data => {
+            if (!data.success) {
+                alert(data.message);
+                return;
+            }
+
+            const updatedHardwareSet = {...hardwareSet};
+            const updatedProject = {...project};
+            updatedHardwareSet.available += quantity;
+            updatedProject.hardwareCheckedOut[updatedHardwareSet.index] -= quantity;
+            updateHardwareSet(updatedHardwareSet);
+            updateProject(updatedProject);
+        });
     };
 
     const handleCheckOut = () => {
-        const quantity = parseInt(textFieldQuantity);
+        const quantity = -1 * parseInt(textFieldQuantity);
         
-        if (isNaN(quantity)) {
+        if (isNaN(quantity) || quantity === 0) {
             alert("Error: invalid input");
-            return;
-        } else if (project.hardwareCheckedOut[hardwareSet.index] + quantity > hardwareSet.capacity || hardwareSet.available - quantity < 0) {
-            alert("Error: trying to check out too many items");
             return;
         }
 
-        const updatedHardwareSet = {...hardwareSet};
-        const updatedProject = {...project};
-        updatedHardwareSet.available -= quantity;
-        updatedProject.hardwareCheckedOut[updatedHardwareSet.index] += quantity;
-        updateHardwareSet(updatedHardwareSet);
-        updateProject(updatedProject);
+        fetch('/updateHardwareSet', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({hardwareSetName: hardwareSet.name, projectID: project.projectID, projectCheckedOut: project.hardwareCheckedOut[hardwareSet.index], quantity: quantity})
+        }).then(response => response.json()).then(data => {
+            if (!data.success) {
+                alert(data.message);
+                return;
+            }
+
+            const updatedHardwareSet = {...hardwareSet};
+            const updatedProject = {...project};
+            updatedHardwareSet.available += quantity;
+            updatedProject.hardwareCheckedOut[updatedHardwareSet.index] -= quantity;
+            updateHardwareSet(updatedHardwareSet);
+            updateProject(updatedProject);
+        });
     };
 
     return (

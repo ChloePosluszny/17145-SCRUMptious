@@ -94,7 +94,7 @@ def fetchProjects():
     projects = []
     idx = 0
     for project in projectsDocuments:
-        projects.append({'name': project['projectName'], 'index': idx, 'users': [decrypt(encryptedUserID, SHIFT_AMOUNT, SHIFT_DIRECTION) for encryptedUserID in project['userIDs']], 'hardwareCheckedOut': [project['hardwareCheckedOut'][hardwareSet] for hardwareSet in project['hardwareCheckedOut']]})
+        projects.append({'name': project['projectName'], 'projectID': project['projectID'], 'index': idx, 'users': [decrypt(encryptedUserID, SHIFT_AMOUNT, SHIFT_DIRECTION) for encryptedUserID in project['userIDs']], 'hardwareCheckedOut': [project['hardwareCheckedOut'][hardwareSet] for hardwareSet in project['hardwareCheckedOut']]})
         idx += 1
     if len(projects) == 0:
         return {'success': False, 'message': 'No projects found'}, 401
@@ -113,6 +113,30 @@ def fetchHardwareSets():
         return {'success': False, 'message': 'No hardware sets found'}, 401
     else:
         return {'success': True, 'hardwareSets': hardwareSets}, 200
+    
+@app.route('/updateHardwareSet', methods=['POST'])
+def updateHardwareSet():
+    data = request.json
+    hardwareSetName = data['hardwareSetName']
+    projectID = data['projectID']
+    projectCheckedOut = data['projectCheckedOut']
+    quantity = data['quantity']
+    hardwareSetAvailability, hardwareSetCapacity = db.getHardwareSetData(hardwareSetName)
+    if quantity > 0: # positive quantity means checking in
+        if projectCheckedOut - quantity < 0 or hardwareSetAvailability + quantity > hardwareSetCapacity:
+            return {'success': False, 'message': 'Error: trying to check in too many items'}, 401
+        else:
+            db.updateHardwareSet(hardwareSetName, quantity)
+            db.updateProjectCheckedOut(projectID, hardwareSetName, quantity)
+            return {'success': True, 'message': 'Hardware set updated'}, 200
+    elif quantity < 0: # negative quantity means checking out
+        if projectCheckedOut - quantity > hardwareSetAvailability or hardwareSetAvailability + quantity < 0:
+            return {'success': False, 'message': 'Error: trying to check out too many items'}, 401
+        else:
+            db.updateHardwareSet(hardwareSetName, quantity)
+            db.updateProjectCheckedOut(projectID, hardwareSetName, quantity)
+            return {'success': True, 'message': 'Hardware set updated'}, 200
+    return {'success': False, 'message': 'Error: quantity cannot be zero'}, 200
 
 if __name__ == '__main__':
     app.run(debug=True)
