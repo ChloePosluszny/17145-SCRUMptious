@@ -90,9 +90,16 @@ def fetchProjects():
     data = request.json
     userID = data['userID']
     encryptedUserID = encrypt(userID, SHIFT_AMOUNT, SHIFT_DIRECTION)
-    user = db.getUser(encryptedUserID)
-    projects = db.getProjects(user)
-    return {'success': True, 'projects': projects}, 200
+    projectsDocuments = db.getProjects(encryptedUserID)
+    projects = []
+    idx = 0
+    for project in projectsDocuments:
+        projects.append({'name': project['projectName'], 'index': idx, 'users': [decrypt(encryptedUserID, SHIFT_AMOUNT, SHIFT_DIRECTION) for encryptedUserID in project['userIDs']], 'hardwareCheckedOut': [project['hardwareCheckedOut'][hardwareSet] for hardwareSet in project['hardwareCheckedOut']]})
+        idx += 1
+    if len(projects) == 0:
+        return {'success': False, 'message': 'No projects found'}, 401
+    else:
+        return {'success': True, 'projects': projects}, 200
 
 @app.route('/fetchHardwareSets', methods=['POST'])
 def fetchHardwareSets():
@@ -102,7 +109,10 @@ def fetchHardwareSets():
     for hardwareSet in hardwareSetsDocuments:
         hardwareSets.append({'name': hardwareSet['hardwareSetName'], 'index': idx, 'capacity': hardwareSet['hardwareSetCapacity'], 'available': hardwareSet['hardwareSetAvailability']})
         idx += 1
-    return {'success': True, 'hardwareSets': hardwareSets}, 200
+    if len(hardwareSets) == 0:
+        return {'success': False, 'message': 'No hardware sets found'}, 401
+    else:
+        return {'success': True, 'hardwareSets': hardwareSets}, 200
 
 if __name__ == '__main__':
     app.run(debug=True)

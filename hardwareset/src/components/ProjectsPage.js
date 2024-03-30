@@ -4,25 +4,19 @@ import ProjectTile from "./ProjectTile";
 import HardwareSetDisplay from "./HardwareSetDisplay";
 import { useNavigate } from "react-router-dom";
 
-export default function ProjectsPage ({hardwareSets, updateHardwareSet}) {
+export default function ProjectsPage ({hardwareSets, updateHardwareSet, projects, updateProject}) {
     /*const [hardwareSets, setHardwareSets] = useState([
         {name: "HW1", index: 0, capacity: 100, available: 100},
         {name: "HW2", index: 1, capacity: 200, available: 200}
-    ]);*/
+    ]);
     const users = ["User1", "User2", "User3"];
     const [projects, setProjects] = useState([
         {name: "Project 1", index: 0, users: [users[0], users[1]], hardwareCheckedOut: [0, 0]},
         {name: "Project 2", index: 1, users: [users[1], users[2]], hardwareCheckedOut: [0, 0]},
         {name: "Project 3", index: 2, users: [users[0], users[2]], hardwareCheckedOut: [0, 0]}
-    ]);
+    ]);*/
     //const [projects, setProjects] = useState([]);
     //const [hardwareSets, setHardwareSets] = useState([]);
-
-    const updateProject = (updatedProject) => {
-        const updatedProjects = [...projects];
-        updatedProjects[updatedProject.index] = updatedProject;
-        setProjects(updatedProjects);
-    };
     
     return (
         <>

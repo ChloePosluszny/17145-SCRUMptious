@@ -84,6 +84,16 @@ def getHardwareSets():
     hardwareSets = hardwareDataCollection.find()
     return hardwareSets
 
+def getProjects(encryptedUserID):
+    # return all projects that the user is in
+    projectsCollection = getCollection("Projects")
+    
+    user = getUser(encryptedUserID)
+    projectIDs = user["projects"]
+    projects = projectsCollection.find({"projectID": {"$in": projectIDs}})
+
+    return projects
+
 
 
 def getUsername(user):
@@ -98,10 +108,6 @@ def getUserID(user):
 def getPassword(user):
     #take user from getUser and return their password
     return user["password"]
-
-def getProjects(user):
-    #take user from getUser and return their list of projects
-    return user["projects"]
 
 def deleteUser(encryptedUserID, encryptedPassword):
     #delete user data
