@@ -29,9 +29,10 @@ export default function ProjectPage () {
                 }).then(response => response.json()).then(data => {
                     if (!data.success) {
                         alert(data.message);
+                        navigate('/createOrJoin')
                         return;
                     }
-                    //setProjects(data.projects);
+                    setProjects(data.projects);
                 });
                 fetch('/fetchHardwareSets', {
                     method: 'POST',
@@ -53,12 +54,18 @@ export default function ProjectPage () {
         setHardwareSets(updatedHardwareSets);
     };
 
+    const updateProject = (updatedProject) => {
+        const updatedProjects = [...projects];
+        updatedProjects[updatedProject.index] = updatedProject;
+        setProjects(updatedProjects);
+    };
+
     return(
     <>
         <Header />
         <div style={styles.container}>
             <div style={styles.content}>
-                <ProjectsPage hardwareSets={hardwareSets} updateHardwareSet={updateHardwareSet} />
+                <ProjectsPage hardwareSets={hardwareSets} updateHardwareSet={updateHardwareSet} projects={projects} updateProject={updateProject} />
             </div>
             <Footer />
         </div>
