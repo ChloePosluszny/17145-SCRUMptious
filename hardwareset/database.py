@@ -94,6 +94,29 @@ def getProjects(encryptedUserID):
 
     return projects
 
+def getHardwareSetData(hardwareSetName):
+    # return availability and capacity of hardware set
+    hardwareDataCollection = getCollection("HardwareData")
+
+    hardwareSet = hardwareDataCollection.find_one({"hardwareSetName": hardwareSetName})
+    return hardwareSet["hardwareSetAvailability"], hardwareSet["hardwareSetCapacity"]
+
+def updateHardwareSet(hardwareSetName, quantity):
+    # update the availability of a hardware set
+    hardwareDataCollection = getCollection("HardwareData")
+
+    hardwareSet = hardwareDataCollection.find_one({"hardwareSetName": hardwareSetName})
+    hardwareSet["hardwareSetAvailability"] += quantity
+    hardwareDataCollection.update_one({"hardwareSetName": hardwareSetName}, {"$set": {"hardwareSetAvailability": hardwareSet["hardwareSetAvailability"]}})
+
+def updateProjectCheckedOut(projectID, hardwareSetName, quantity):
+    # update the amount of hardware checked out by a project
+    projectsCollection = getCollection("Projects")
+
+    project = projectsCollection.find_one({"projectID": projectID})
+    project["hardwareCheckedOut"][hardwareSetName] -= quantity
+    projectsCollection.update_one({"projectID": projectID}, {"$set": {"hardwareCheckedOut": project["hardwareCheckedOut"]}})
+
 
 
 def getUsername(user):
