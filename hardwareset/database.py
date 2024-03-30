@@ -41,9 +41,6 @@ def getUser(encryptedUserID):
     usersCollection = getCollection("Users")
 
     user = usersCollection.find_one({"userID" : encryptedUserID})
-    # check if user exists
-    if user == None :
-        return None
     return user
 
 def createProject(projectName, projectID, description, encryptedUserID):
@@ -65,24 +62,29 @@ def getProject(projectID):
     projectsCollection = getCollection("Projects")
 
     project = projectsCollection.find_one({"projectID": projectID})
-    # check if project exists
-    if project == None:
-        return None
     return project
 
 def joinProject(projectID, encryptedUserID):
     # add user to project
+    # add project to user
     projectsCollection = getCollection("Projects")
+    usersCollection = getCollection("Users")
 
     project = projectsCollection.find_one({"projectID": projectID})
+    user = usersCollection.find_one({"userID": encryptedUserID})
     project["userIDs"].append(encryptedUserID)
+    user["projects"].append(projectID)
     projectsCollection.update_one({"projectID": projectID}, {"$set": {"userIDs": project["userIDs"]}})
+    usersCollection.update_one({"userID": encryptedUserID}, {"$set": {"projects": user["projects"]}})
 
 def getHardwareSets():
     # return all hardware sets
     hardwareDataCollection = getCollection("HardwareData")
+    
     hardwareSets = hardwareDataCollection.find()
     return hardwareSets
+
+
 
 def getUsername(user):
     #get the user's username
