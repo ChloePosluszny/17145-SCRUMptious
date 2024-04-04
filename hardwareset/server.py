@@ -59,6 +59,7 @@ def createProject():
     projectCreated = db.createProject(projectName, projectID, description, encryptedUserID)
     # check if project was created
     if projectCreated:
+        db.joinProject(projectID, encryptedUserID)
         return jsonify({'success': True, 'projectID': projectID}), 200
     else:
         return jsonify({'success': False, 'message': 'ProjectID already exists'}), 401
