@@ -53,8 +53,9 @@ def createProject(projectName, projectID, description, encryptedUserID):
     # check if project already exists
     if project != None :
         return False
-    document = {"projectName": projectName, "projectID": projectID, "description": description, "userIDs": [encryptedUserID], "hardwareCheckedOut": {hardwareSet["hardwareSetName"]: 0 for hardwareSet in hardwareSets}}
+    document = {"projectName": projectName, "projectID": projectID, "description": description, "userIDs": [], "hardwareCheckedOut": {hardwareSet["hardwareSetName"]: 0 for hardwareSet in hardwareSets}}
     projectsCollection.insert_one(document)
+    joinProject(projectID, encryptedUserID)
     return True
 
 def getProject(projectID):
