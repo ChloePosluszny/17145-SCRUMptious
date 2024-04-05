@@ -131,7 +131,7 @@ def updateHardwareSet():
             db.updateProjectCheckedOut(projectID, hardwareSetName, quantity)
             return {'success': True, 'message': 'Hardware set updated'}, 200
     elif quantity < 0: # negative quantity means checking out
-        if projectCheckedOut - quantity > hardwareSetAvailability or hardwareSetAvailability + quantity < 0:
+        if projectCheckedOut - quantity > hardwareSetCapacity or hardwareSetAvailability + quantity < 0:
             return {'success': False, 'message': 'Error: trying to check out too many items'}, 401
         else:
             db.updateHardwareSet(hardwareSetName, quantity)
