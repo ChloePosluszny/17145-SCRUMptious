@@ -15,6 +15,7 @@ export default function JoinProject ({userID}) {
                 alert(data.message);
                 return;
             }
+            alert(data.message);
             console.log(data);
         });
     }
